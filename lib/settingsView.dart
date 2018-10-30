@@ -28,8 +28,11 @@ class _SettingsViewState extends State<SettingsView> {
         style: TextStyle(fontWeight: FontWeight.bold),),
         Text("Device Name: " + _deviceName),
         Divider(),
-        Text("Configuration",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        ListTile(
+          title: Text(
+            "Configuration",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         new RadioListTile<ConfigurationValue>(
           title: const Text('Start Wand (Alpine)'),
