@@ -8,8 +8,6 @@ import 'package:http/http.dart' as http;
 
 var rng = new Random();
 
-var names = ['Steve', 'Bill', 'John', 'Ted', 'Eric', 'Tom', 'Luke', 'Peter'];
-
 class CardResultView extends StatefulWidget {
   @override
   _CardResultViewState createState() => _CardResultViewState();
@@ -21,9 +19,14 @@ class _CardResultViewState extends State<CardResultView> {
   Future<Null> updateCards() async {
     final jsonDB = await fetchTimes();
 
-    List<RacerCard> _newCards = [];
+    List<Widget> _newCards = [];
 
-    for(var i = 0; i < jsonDB.length; i++){
+    _newCards.add(Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text("Results: ", ),
+    ));
+
+    for(var i = jsonDB.length-1; i >= 0; i--){
       var entry = jsonDB[i];
       _newCards.add(RacerCard(entry.racerID, entry.racerName, entry.runDuration, entry.startTime));
     }

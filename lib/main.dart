@@ -15,14 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Thwack Timing',
       theme: new ThemeData(
         primaryColor: Colors.blueGrey[700],
         primaryColorDark: Color(0xFF455A64),
         primaryColorLight: Color(0xFFCFD8DC),
         accentColor: Colors.blue,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: new MyHomePage(title: 'Thwack Timing Gate'),
     );
   }
 }

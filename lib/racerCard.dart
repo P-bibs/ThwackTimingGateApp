@@ -20,8 +20,18 @@ class RacerCard extends StatelessWidget {
                 Icons.flag,
                 color: runDuration == 0 ? Colors.red : Colors.green
                 ),
-            title: Text(runDuration == 0 ? "DNF" : runDuration.toString()),
-            subtitle: Text('Racer ' + racerID.toString() + ' (' + (racerName ?? 'No Name') + ')'),
+            title: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(runDuration == 0 ? "DNF" : (runDuration.toString() + " seconds")),
+            ),
+            subtitle:
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Racer ' + racerID.toString() + ' (' + (racerName ?? 'No Name') + ')'),
+                  Text('Started at ' + startTime)
+                ]
+              )
           ),
           new ButtonTheme.bar( // make buttons use the appropriate styles for cards
             child: new ButtonBar(
