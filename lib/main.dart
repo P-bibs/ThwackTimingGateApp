@@ -49,13 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   int _currentIndex = 0;
 
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   void onTabTapped(int index){
       setState((){
         _currentIndex = index;
@@ -79,32 +72,14 @@ class _MyHomePageState extends State<MyHomePage> {
       body: AnimatedCrossFade(
         alignment: Alignment.center,
         duration: const Duration(milliseconds: 200),
-        // firstChild: new Center(
-        //     child: new Column(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: <Widget>[
-        //         new Text(
-        //           'You have pushed the button this many times:',
-        //         ),
-        //         new Text(
-        //           '$_counter',
-        //           style: Theme.of(context).textTheme.display1,
-        //         ),
-        //       ],
-        //     ),
-        //   ),
         firstChild: CardResultView(),
-        //firstChild: Text("Placeholder1"),
         secondChild: SettingsView(),
-        //secondChild: Text("Placeholder"),
         crossFadeState: _currentIndex == 0 ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       ),
       floatingActionButton: new RawMaterialButton(
-        onPressed: _incrementCounter,
+        onPressed: (){},
         shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
         fillColor: Theme.of(context).accentColor,
-        //splashColor: Theme.of(context).primaryColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           child: Row(
