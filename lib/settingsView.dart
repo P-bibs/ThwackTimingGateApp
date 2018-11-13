@@ -5,7 +5,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:connectivity/connectivity.dart';
+//import 'package:connectivity/connectivity.dart';
+
+import 'globals.dart' as globals;
 
 enum ConfigurationValue  {wand, gun}
 
@@ -17,17 +19,32 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   final _deviceName = "Thwack1";
   var _configurationMode = ConfigurationValue.wand;
-  var _SSID = "";
+  final myController = TextEditingController();
 
-  resolveWifi() {
-    Connectivity().getWifiName().then((val) => setState(() {
-          _SSID = val;
-        }));
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+    myController.dispose();
+    super.dispose();
+  }
+
+  //  var _SSID = "";
+
+  // resolveWifi() {
+  //   Connectivity().getWifiName().then((val) => setState(() {
+  //         _SSID = val;
+  //       }));
+  // }
+
+  void changeIP(){
+    setState(() {
+      globals.currentIP = myController.text;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    resolveWifi();
+    //  resolveWifi();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -36,13 +53,28 @@ class _SettingsViewState extends State<SettingsView> {
         Text("About",
         style: TextStyle(fontWeight: FontWeight.bold),),
         Text("Device Name: " + _deviceName),
-        Text("Current Network: " + _SSID),
+        //  Text("Current Network: " + _SSID),
+        Text("Current Target IP: " + globals.currentIP),
         Divider(),
         ListTile(
           title: Text(
             "Configuration",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
+        ),
+        Row(
+          children: <Widget>[
+            TextField(
+              controller: myController,
+              decoration: InputDecoration(
+                labelText: 'Enter Pi Password'
+              ),
+            ),
+            RaisedButton(
+              child: Text("Enter"),
+              onPressed: changeIP,
+            )
+          ],
         ),
         new RadioListTile<ConfigurationValue>(
           title: const Text('Start Wand (Alpine)'),

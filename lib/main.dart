@@ -2,7 +2,6 @@ import 'dart:async';
 import 'requester.dart';
 import 'racerCard.dart';
 import 'cardResultView.dart';
-import 'requesterOld.dart';
 import 'settingsView.dart';
 
 import 'package:flutter/material.dart';

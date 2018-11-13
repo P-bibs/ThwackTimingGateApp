@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'globals.dart' as globals;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Time>> fetchTimes() async {
   final response =
-      await http.get('http://192.168.0.105:5000');
-      //await http.get('http://10.3.3.119:5000');
+      await http.get('http://' + globals.currentIP + ':5000');
 
   if (response.statusCode == 200) {
     // If server returns an OK response, parse the JSON
