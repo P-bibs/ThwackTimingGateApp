@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:connectivity/connectivity.dart';
 
 enum ConfigurationValue  {wand, gun}
 
@@ -16,9 +17,17 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   final _deviceName = "Thwack1";
   var _configurationMode = ConfigurationValue.wand;
+  var _SSID = "";
+
+  resolveWifi() {
+    Connectivity().getWifiName().then((val) => setState(() {
+          _SSID = val;
+        }));
+  }
 
   @override
   Widget build(BuildContext context) {
+    resolveWifi();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -27,6 +36,7 @@ class _SettingsViewState extends State<SettingsView> {
         Text("About",
         style: TextStyle(fontWeight: FontWeight.bold),),
         Text("Device Name: " + _deviceName),
+        Text("Current Network: " + _SSID),
         Divider(),
         ListTile(
           title: Text(
@@ -63,7 +73,7 @@ Settings
 
 About:
 Device Name
-
+SSID
 
 Configuration:
 Start Wand
