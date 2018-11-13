@@ -63,16 +63,25 @@ class _SettingsViewState extends State<SettingsView> {
           ),
         ),
         Row(
+          
           children: <Widget>[
-            TextField(
-              controller: myController,
-              decoration: InputDecoration(
-                labelText: 'Enter Pi Password'
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: myController,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Pi IP'
+                  ),
+                ),
               ),
             ),
-            RaisedButton(
-              child: Text("Enter"),
-              onPressed: changeIP,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RaisedButton(
+                child: Text("Enter"),
+                onPressed: changeIP,
+              ),
             )
           ],
         ),
