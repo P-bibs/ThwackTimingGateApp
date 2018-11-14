@@ -75,21 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
         secondChild: SettingsView(),
         crossFadeState: _currentIndex == 0 ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       ),
-      floatingActionButton: new RawMaterialButton(
-        onPressed: (){},
-        shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        fillColor: Theme.of(context).accentColor,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(Icons.add),
-              Text("Increment")
-            ],
-          ),
-        )
-      ),
       bottomNavigationBar: new BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         currentIndex: _currentIndex,
