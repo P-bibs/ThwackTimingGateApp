@@ -42,6 +42,71 @@ class _SettingsViewState extends State<SettingsView> {
     });
   }
 
+  Future<void> _pickStartMode1() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pick Start Mode'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              new RadioListTile<ConfigurationValue>(
+                title: const Text('Start Wand (Alpine)'),
+                value: ConfigurationValue.wand,
+                groupValue: _configurationMode,
+                onChanged: (ConfigurationValue value) { setState(() { _configurationMode = value; }); },
+              ),
+              new RadioListTile<ConfigurationValue>(
+                title: const Text('Start Gun (Track)'),
+                value: ConfigurationValue.gun,
+                groupValue: _configurationMode,
+                onChanged: (ConfigurationValue value) { setState(() { _configurationMode = value; }); },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _pickStartMode() async {
+  switch (await showDialog<ConfigurationValue>(
+    context: context,
+    builder: (BuildContext context) {
+      return SimpleDialog(
+        title: const Text('Select Configuration Mode'),
+        children: <Widget>[
+          SimpleDialogOption(
+            onPressed: () { Navigator.pop(context, ConfigurationValue.wand); },
+            child: const Text('Start Wand (Alpine)'),
+          ),
+          SimpleDialogOption(
+            onPressed: () { Navigator.pop(context, ConfigurationValue.gun); },
+            child: const Text('Start Gun (Track)'),
+          ),
+        ],
+      );
+    }
+  )) {
+    case ConfigurationValue.wand:
+      setState(() { _configurationMode = ConfigurationValue.wand; });
+    break;
+    case ConfigurationValue.gun:
+      setState(() { _configurationMode = ConfigurationValue.gun; });
+    break;
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     //  resolveWifi();
@@ -85,19 +150,18 @@ class _SettingsViewState extends State<SettingsView> {
             )
           ],
         ),
-        new RadioListTile<ConfigurationValue>(
-          title: const Text('Start Wand (Alpine)'),
-          value: ConfigurationValue.wand,
-          groupValue: _configurationMode,
-          onChanged: (ConfigurationValue value) { setState(() { _configurationMode = value; }); },
+        ListTile(
+          title: const Text("Finish Line IP"),
+          subtitle: Text("Currently: " + globals.currentIP),
         ),
-        new RadioListTile<ConfigurationValue>(
-          title: const Text('Start Gun (Track)'),
-          value: ConfigurationValue.gun,
-          groupValue: _configurationMode,
-          onChanged: (ConfigurationValue value) { setState(() { _configurationMode = value; }); },
+        ListTile(
+          title: const Text("Start Configuration"),
+          subtitle: Text("Currently: " + _configurationMode.toString()),
+          onTap: _pickStartMode,
         ),
+
         Divider(),
+
         Text("Dangerous",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
         ),
