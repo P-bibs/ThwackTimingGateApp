@@ -17,23 +17,48 @@ class _CardResultViewState extends State<CardResultView> {
   List<Widget> _card = [Text("No Results Yet")];
 
   Future<Null> updateCards() async {
-    final jsonDB = await fetchTimes();
+    final jsonDB = await fetchTimes().
+      timeout(
+        Duration(seconds: 3),
+        onTimeout: (){return [];}
+      );
 
-    List<Widget> _newCards = [];
+    if (jsonDB.length == 0){
+      List<Widget> _errorMessage = [Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("ERROR"),
+          Text("An error occured"),
+          Text("ensure all connections are valid")
+        ],
+      )];
 
-    _newCards.add(Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text("Results: ", ),
-    ));
+      for (var i = 1; i < _card.length; i++) {
+        _errorMessage.add(_card[i]);
+      }
 
-    for(var i = jsonDB.length-1; i >= 0; i--){
-      var entry = jsonDB[i];
-      _newCards.add(RacerCard(entry.racerID, entry.racerName, entry.runDuration, entry.startTime));
+      setState(() {
+        _card = _errorMessage;
+      });
     }
+    else{
+      List<Widget> _newCards = [];
 
-    setState(() {
-      _card = _newCards;
-    });
+      _newCards.add(Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text("Results: ", ),
+      ));
+
+      for(var i = jsonDB.length-1; i >= 0; i--){
+        var entry = jsonDB[i];
+        _newCards.add(RacerCard(entry.racerID, entry.racerName, entry.runDuration, entry.startTime));
+      }
+
+      setState(() {
+        _card = _newCards;
+      });
+    }
 
     return null;
   }
