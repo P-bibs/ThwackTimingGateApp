@@ -19,12 +19,12 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   final _deviceName = "Thwack1";
   var _configurationMode = ConfigurationValue.wand;
-  final myController = TextEditingController();
+  final _pickIpController = TextEditingController();
 
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
-    myController.dispose();
+    _pickIpController.dispose();
     super.dispose();
   }
 
@@ -36,40 +36,64 @@ class _SettingsViewState extends State<SettingsView> {
   //       }));
   // }
 
-  void changeIP(){
-    setState(() {
-      globals.currentIP = myController.text;
-    });
-  }
+  Future<void> _pickStartMode() async {
+    switch (await showDialog<ConfigurationValue>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text('Select Configuration Mode'),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () { Navigator.pop(context, ConfigurationValue.wand); },
+                child: const Text('Start Wand (Alpine)'),
+              ),
+              SimpleDialogOption(
+                onPressed: () { Navigator.pop(context, ConfigurationValue.gun); },
+                child: const Text('Start Gun (Track)'),
+              ),
+            ],
+          );
+        }
+      )) {
+        case ConfigurationValue.wand:
+          setState(() { _configurationMode = ConfigurationValue.wand; });
+        break;
+        case ConfigurationValue.gun:
+          setState(() { _configurationMode = ConfigurationValue.gun; });
+        break;
+      }
+    }
 
-  Future<void> _pickStartMode1() async {
+  Future<void> _pickIP() async {
+    var _pickIpController = TextEditingController(text: globals.currentIP);
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Pick Start Mode'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              new RadioListTile<ConfigurationValue>(
-                title: const Text('Start Wand (Alpine)'),
-                value: ConfigurationValue.wand,
-                groupValue: _configurationMode,
-                onChanged: (ConfigurationValue value) { setState(() { _configurationMode = value; }); },
+          title: Text('Enter IP of Finish Line'),
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _pickIpController,
+              decoration: InputDecoration(
+                labelText: 'Enter Pi IP'
               ),
-              new RadioListTile<ConfigurationValue>(
-                title: const Text('Start Gun (Track)'),
-                value: ConfigurationValue.gun,
-                groupValue: _configurationMode,
-                onChanged: (ConfigurationValue value) { setState(() { _configurationMode = value; }); },
-              ),
-            ],
+            ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Confirm'),
+              child: Text('Cancel'),
               onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('Enter'),
+              onPressed: () {
+                setState(() {
+                  globals.currentIP = _pickIpController.text;
+                });
                 Navigator.of(context).pop();
               },
             ),
@@ -79,47 +103,27 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  Future<void> _pickStartMode() async {
-  switch (await showDialog<ConfigurationValue>(
-    context: context,
-    builder: (BuildContext context) {
-      return SimpleDialog(
-        title: const Text('Select Configuration Mode'),
-        children: <Widget>[
-          SimpleDialogOption(
-            onPressed: () { Navigator.pop(context, ConfigurationValue.wand); },
-            child: const Text('Start Wand (Alpine)'),
-          ),
-          SimpleDialogOption(
-            onPressed: () { Navigator.pop(context, ConfigurationValue.gun); },
-            child: const Text('Start Gun (Track)'),
-          ),
-        ],
-      );
-    }
-  )) {
-    case ConfigurationValue.wand:
-      setState(() { _configurationMode = ConfigurationValue.wand; });
-    break;
-    case ConfigurationValue.gun:
-      setState(() { _configurationMode = ConfigurationValue.gun; });
-    break;
-  }
-}
-
   @override
   Widget build(BuildContext context) {
     //  resolveWifi();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: <Widget>[
-        Text("SETTINGS"),
+        ListTile(
+          title: Text("SETTINGS"),
+        ),
+
         Divider(),
-        Text("About",
-        style: TextStyle(fontWeight: FontWeight.bold),),
-        Text("Device Name: " + _deviceName),
-        //  Text("Current Network: " + _SSID),
-        Text("Current Target IP: " + globals.currentIP),
+        ListTile(
+          title: Text("About", style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        ListTile(
+          title: Text("Device Name"),
+          subtitle: Text(_deviceName),
+        ),
+        // ListTile(
+        //   title: Text("Current Wifi"),
+        //   subtitle: Text(_SSID),
+        // ),
         Divider(),
         ListTile(
           title: Text(
@@ -127,43 +131,20 @@ class _SettingsViewState extends State<SettingsView> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        Row(
-          
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: myController,
-                  decoration: InputDecoration(
-                    labelText: 'Enter Pi IP'
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
-                child: Text("Enter"),
-                onPressed: changeIP,
-              ),
-            )
-          ],
-        ),
         ListTile(
           title: const Text("Finish Line IP"),
           subtitle: Text("Currently: " + globals.currentIP),
+          onTap: _pickIP,
         ),
         ListTile(
           title: const Text("Start Configuration"),
-          subtitle: Text("Currently: " + _configurationMode.toString()),
+          subtitle: Text("Currently: " + _configurationMode.toString().substring(_configurationMode.toString().indexOf(".")+1, _configurationMode.toString().length)),
           onTap: _pickStartMode,
         ),
 
         Divider(),
-
-        Text("Dangerous",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        ListTile(
+          title: Text("Dangerous", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
         ),
         ListTile(
           title: Text("Erase All Times"),
