@@ -44,3 +44,24 @@ class Time {
     );
   }
 }
+
+Future<List<Map<String, dynamic>>> fetchTable() async {
+  final response =
+      await http.get('http://' + globals.currentIP + ':5000/idTable');
+
+  if (response.statusCode == 200) {
+    // If server returns an OK response, parse the JSON
+    List data = json.decode(response.body);
+    return data;
+
+    // List<TableItem> returnList = [];
+    // for(var i = 0; i < data.length; i++){ 
+    //   returnList.add(TableItem.fromJson(data[i]));
+    // }
+    // return returnList;
+
+  } else {
+    // If that response was not OK, throw an error.
+    throw Exception('Failed to load post');
+  }
+}

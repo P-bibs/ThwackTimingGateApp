@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'requester.dart';
 import 'racerCard.dart';
+import 'tableConfigureView.dart';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -140,6 +141,16 @@ class _SettingsViewState extends State<SettingsView> {
           title: const Text("Start Configuration"),
           subtitle: Text("Currently: " + _configurationMode.toString().substring(_configurationMode.toString().indexOf(".")+1, _configurationMode.toString().length)),
           onTap: _pickStartMode,
+        ),
+        ListTile(
+          title: const Text("ID to Name Conversion Table"),
+          subtitle: Text("Tap to Configue"),
+          onTap: () {
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => TableConfigureView())
+            );
+          }
         ),
 
         Divider(),

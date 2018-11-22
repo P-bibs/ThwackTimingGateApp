@@ -23,6 +23,7 @@ class _CardResultViewState extends State<CardResultView> {
         onTimeout: (){return [];}
       );
 
+    //error message if request timeouts
     if (jsonDB.length == 0){
       List<Widget> _errorMessage = [Column(
         mainAxisSize: MainAxisSize.min,
@@ -42,6 +43,7 @@ class _CardResultViewState extends State<CardResultView> {
         _card = _errorMessage;
       });
     }
+    //if request is positive, update cards
     else{
       List<Widget> _newCards = [];
 
