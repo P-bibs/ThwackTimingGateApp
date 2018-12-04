@@ -13,6 +13,13 @@ class TableConfigureView extends StatefulWidget {
 }
 
 class _TableConfigureViewState extends State<TableConfigureView> {
+
+  @override
+  initState(){
+    super.initState();
+    fetchTable();
+  }
+
   List _table = [];
 
   Future<void> _addEntry() async {
@@ -20,12 +27,13 @@ class _TableConfigureViewState extends State<TableConfigureView> {
     var _nameController = TextEditingController();
     return showDialog<void>(
       context: context,
-      barrierDismissible: true, // user must tap button!
+      barrierDismissible: true, 
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Assign ID to Racer'),
-          content: ListView(
-            shrinkWrap: true,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            //shrinkWrap: true,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -69,41 +77,12 @@ class _TableConfigureViewState extends State<TableConfigureView> {
     );
   }
 
-  Future<Null> updateTable() async {
+  Future<Null> fetchTable() async {
     // final jsonTable = await fetchTable().
     //   timeout(
     //     Duration(seconds: 3),
     //     onTimeout: (){return [];}
     //   );
-
-    //error message if request timeouts
-    // if (jsonTable.length == 0){
-    //   List<Widget> _errorMessage = [Column(
-    //     mainAxisSize: MainAxisSize.min,
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: <Widget>[
-    //       Text("ERROR"),
-    //       Text("An error occured"),
-    //       Text("ensure all connections are valid")
-    //     ],
-    //   )];
-
-    //   setState(() {
-    //     _table = _errorMessage;
-    //   });
-    // }
-    //if request is positive, update cards
-    // else{
-      // List<TableItem> tempTable = [];
-
-
-      // for(var i = jsonTable.length-1; i >= 0; i--){
-      //   var tableEntry = jsonTable[i];
-      //   tempTable.add(ListTile(
-      //     leading: RaisedButton(),
-
-      //     );
-      // }
 
       final jsonTable = [
         ["1", "Paul"],
@@ -126,6 +105,12 @@ class _TableConfigureViewState extends State<TableConfigureView> {
     return Scaffold(
       appBar: AppBar(
         title:Text("Add/Delete Table Entries"),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.check),
+          onPressed: (){sendTable(_table);Navigator.pop(context);},
+        ),
+        
         actions: <Widget>[
           //sort alphabetical by name
           IconButton(
@@ -155,35 +140,32 @@ class _TableConfigureViewState extends State<TableConfigureView> {
           child: Icon(Icons.add),
           onPressed: _addEntry,
         ),
-      body: RefreshIndicator(
-        onRefresh: updateTable,
-        child: ListView.builder(
-          itemCount: _table.length,
-          itemBuilder: (context, index) {
-            final item = _table[index];
+      body: ListView.builder(
+        itemCount: _table.length,
+        itemBuilder: (context, index) {
+          final item = _table[index];
 
-            return Dismissible(
-              // Each Dismissible must contain a Key. Keys allow Flutter to
-              // uniquely identify Widgets.
-              key: Key(item[0]),
-              // We also need to provide a function that tells our app
-              // what to do after an item has been swiped away.
-              onDismissed: (direction) {
-                // Remove the item from our data source
-                setState(() {
-                  _table.removeAt(index);
-                });
+          return Dismissible(
+            // Each Dismissible must contain a Key. Keys allow Flutter to
+            // uniquely identify Widgets.
+            key: Key(item[0]),
+            // We also need to provide a function that tells our app
+            // what to do after an item has been swiped away.
+            onDismissed: (direction) {
+              // Remove the item from our data source
+              setState(() {
+                _table.removeAt(index);
+              });
 
-                // Then show a snackbar!
-                Scaffold.of(context)
-                    .showSnackBar(SnackBar(content: Text("Deleted")));
-              },
-              // Show a red background as the item is swiped away
-              background: Container(color: Colors.red),
-              child: ListTile(title: Text("Racer ID " + item[0] + " -> " + item[1]), subtitle: Text("Swipe to Delete"),),
-            );
-          },
-        ),
+              // Then show a snackbar!
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text("Deleted")));
+            },
+            // Show a red background as the item is swiped away
+            background: Container(color: Colors.red),
+            child: ListTile(title: Text("Racer ID " + item[0] + " -> " + item[1]), subtitle: Text("Swipe to Delete"),),
+          );
+        },
       ),
     );
   }

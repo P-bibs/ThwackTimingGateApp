@@ -25,22 +25,29 @@ class _CardResultViewState extends State<CardResultView> {
 
     //error message if request timeouts
     if (jsonDB.length == 0){
-      List<Widget> _errorMessage = [Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text("ERROR"),
-          Text("An error occured"),
-          Text("ensure all connections are valid")
-        ],
-      )];
+      // List<Widget> _errorMessage = [Column(
+      //   mainAxisSize: MainAxisSize.min,
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: <Widget>[
+      //     Text("ERROR"),
+      //     Text("An error occured"),
+      //     Text("ensure all connections are valid")
+      //   ],
+      // )];
 
-      for (var i = 1; i < _card.length; i++) {
-        _errorMessage.add(_card[i]);
-      }
+      // for (var i = 1; i < _card.length; i++) {
+      //   _errorMessage.add(_card[i]);
+      // }
+      List<Widget> _tempCard = [];
+      _tempCard.add(RacerCard(1, "Paul", 54.0, "17:42"));
+      _tempCard.add(RacerCard(2, "Liam", 51.2, "17:43"));
+      _tempCard.add(RacerCard(3, "Aaron", 48, "17:43"));
+      _tempCard.add(RacerCard(4, "Jacob", 55, "17:44"));
+
+      
 
       setState(() {
-        _card = _errorMessage;
+        _card = _tempCard;
       });
     }
     //if request is positive, update cards
@@ -61,6 +68,18 @@ class _CardResultViewState extends State<CardResultView> {
         _card = _newCards;
       });
     }
+
+    var _tempCard = [];
+      _tempCard.add(RacerCard(1, "Paul", 54.0, "17:42"));
+      _tempCard.add(RacerCard(2, "Liam", 51.2, "17:43"));
+      _tempCard.add(RacerCard(3, "Aaron", 48, "17:43"));
+      _tempCard.add(RacerCard(4, "Jacob", 55, "17:44"));
+
+      
+
+      setState(() {
+        _card = _tempCard;
+      });
 
     return null;
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+//import 'dart:html';
 
 import 'globals.dart' as globals;
 
@@ -63,5 +64,30 @@ Future<List<Map<String, dynamic>>> fetchTable() async {
   } else {
     // If that response was not OK, throw an error.
     throw Exception('Failed to load post');
+  }
+}
+
+Future<void> sendTable(dynamic data) async {
+  var response;
+
+  http.post(
+    'http://' + globals.currentIP + ':5000/idTable', 
+    body: data
+  ).then((postResponse) {response = postResponse;});
+
+  // HttpRequest.request(
+  //   'http://' + globals.currentIP + ':5000/idTable',
+  //   method: 'POST',
+  //   sendData: json.encode(data),
+  //   requestHeaders: {
+  //     'Content-Type': 'application/json; charset=UTF-8'
+  //   }
+  // )
+
+  if (response.statusCode == 200) {
+
+  } else {
+    // If that response was not OK, throw an error.
+    throw Exception('Failed to send post');
   }
 }
