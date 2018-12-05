@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'requester.dart';
 import 'racerCard.dart';
-import 'cardResultView.dart';
 import 'settingsView.dart';
 
 import 'package:flutter/material.dart';
@@ -60,16 +59,74 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   int _counter = 0;
   int _currentIndex = 0;
 
-  void onTabTapped(int index){
-      if(!_controller.isDismissed){
-        _controller.reverse();
+
+  List<Widget> _card = [Text("No Results Yet")];
+  Future<Null> updateCards() async {
+    final jsonDB = await fetchTimes().
+      timeout(
+        Duration(seconds: 3),
+        onTimeout: (){return [];}
+      );
+
+    //error message if request timeouts
+    if (jsonDB.length == 0){
+      // List<Widget> _errorMessage = [Column(
+      //   mainAxisSize: MainAxisSize.min,
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: <Widget>[
+      //     Text("ERROR"),
+      //     Text("An error occured"),
+      //     Text("ensure all connections are valid")
+      //   ],
+      // )];
+
+      // for (var i = 1; i < _card.length; i++) {
+      //   _errorMessage.add(_card[i]);
+      // }
+      List<Widget> _tempCard = [];
+      _tempCard.add(RacerCard(1, "Paul", 54.0, "17:42"));
+      _tempCard.add(RacerCard(2, "Liam", 51.2, "17:43"));
+      _tempCard.add(RacerCard(3, "Aaron", 48, "17:43"));
+      _tempCard.add(RacerCard(4, "Jacob", 55, "17:44"));      
+
+      setState(() {
+        _card = _tempCard;
+      });
+    }
+    //if request is positive, update cards
+    else{
+      List<Widget> _newCards = [];
+
+      _newCards.add(Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text("Results: ", ),
+      ));
+
+      for(var i = jsonDB.length-1; i >= 0; i--){
+        var entry = jsonDB[i];
+        _newCards.add(RacerCard(entry.racerID, entry.racerName, entry.runDuration, entry.startTime));
       }
-      setState((){
-        _currentIndex = index;
+
+      setState(() {
+        _card = _newCards;
       });
     }
 
-    
+    var _tempCard = [];
+      _tempCard.add(RacerCard(1, "Paul", 54.0, "17:42"));
+      _tempCard.add(RacerCard(2, "Liam", 51.2, "17:43"));
+      _tempCard.add(RacerCard(3, "Aaron", 48, "17:43"));
+      _tempCard.add(RacerCard(4, "Jacob", 55, "17:44"));
+
+      
+
+      setState(() {
+        _card = _tempCard;
+      });
+
+    return null;
+  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +212,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body:CardResultView(),
+
+      body: Container(
+        child: RefreshIndicator(
+          onRefresh: updateCards,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: _card
+          )
+        ),
+      )
     );
   }
 }
