@@ -42,9 +42,7 @@ class _CardResultViewState extends State<CardResultView> {
       _tempCard.add(RacerCard(1, "Paul", 54.0, "17:42"));
       _tempCard.add(RacerCard(2, "Liam", 51.2, "17:43"));
       _tempCard.add(RacerCard(3, "Aaron", 48, "17:43"));
-      _tempCard.add(RacerCard(4, "Jacob", 55, "17:44"));
-
-      
+      _tempCard.add(RacerCard(4, "Jacob", 55, "17:44"));      
 
       setState(() {
         _card = _tempCard;
