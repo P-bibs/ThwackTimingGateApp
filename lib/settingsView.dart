@@ -107,61 +107,66 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     //  resolveWifi();
-    return ListView(
-      children: <Widget>[
-        ListTile(
-          title: Text("SETTINGS"),
-        ),
-
-        Divider(),
-        ListTile(
-          title: Text("About", style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        ListTile(
-          title: Text("Device Name"),
-          subtitle: Text(_deviceName),
-        ),
-        // ListTile(
-        //   title: Text("Current Wifi"),
-        //   subtitle: Text(_SSID),
-        // ),
-        Divider(),
-        ListTile(
-          title: Text(
-            "Configuration",
-            style: TextStyle(fontWeight: FontWeight.bold),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Settings")
+      ),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            title: Text("SETTINGS"),
           ),
-        ),
-        ListTile(
-          title: const Text("Finish Line IP"),
-          subtitle: Text("Currently: " + globals.currentIP),
-          onTap: _pickIP,
-        ),
-        ListTile(
-          title: const Text("Start Configuration"),
-          subtitle: Text("Currently: " + _configurationMode.toString().substring(_configurationMode.toString().indexOf(".")+1, _configurationMode.toString().length)),
-          onTap: _pickStartMode,
-        ),
-        ListTile(
-          title: const Text("ID to Name Conversion Table"),
-          subtitle: Text("Tap to Configue"),
-          onTap: () {
-            Navigator.push(
-              context, 
-              MaterialPageRoute(builder: (context) => TableConfigureView())
-            );
-          }
-        ),
 
-        Divider(),
-        ListTile(
-          title: Text("Dangerous", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
-        ),
-        ListTile(
-          title: Text("Erase All Times"),
-          onTap: (() {})
-        )
-      ]
+          Divider(),
+          ListTile(
+            title: Text("About", style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          ListTile(
+            title: Text("Device Name"),
+            subtitle: Text(_deviceName),
+          ),
+          // ListTile(
+          //   title: Text("Current Wifi"),
+          //   subtitle: Text(_SSID),
+          // ),
+          Divider(),
+          ListTile(
+            title: Text(
+              "Configuration",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          ListTile(
+            title: const Text("Finish Line IP"),
+            subtitle: Text("Currently: " + globals.currentIP),
+            onTap: _pickIP,
+          ),
+          ListTile(
+            title: const Text("Start Configuration"),
+            subtitle: Text("Currently: " + _configurationMode.toString().substring(_configurationMode.toString().indexOf(".")+1, _configurationMode.toString().length)),
+            onTap: _pickStartMode,
+          ),
+          ListTile(
+            title: const Text("ID to Name Conversion Table"),
+            subtitle: Text("Tap to Configue"),
+            onTap: () {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => TableConfigureView())
+              );
+            }
+          ),
+
+          Divider(),
+          ListTile(
+            title: Text("Dangerous", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+          ),
+          ListTile(
+            title: Text("Erase All Times"),
+            onTap: (() {})
+          )
+        ]
+      ),
     );
   }
 }

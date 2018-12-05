@@ -44,18 +44,37 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
+  AnimationController _controller;
+
+  static const List<IconData> icons = const [ Icons.sort_by_alpha, Icons.format_list_numbered, Icons.timer ];
+
+  @override
+  void initState() {
+    _controller = new AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
   int _counter = 0;
   int _currentIndex = 0;
 
   void onTabTapped(int index){
+      if(!_controller.isDismissed){
+        _controller.reverse();
+      }
       setState((){
         _currentIndex = index;
       });
     }
 
+    
+
   @override
   Widget build(BuildContext context) {
+    Color backgroundColor = Theme.of(context).cardColor;
+    Color foregroundColor = Theme.of(context).accentColor;
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -67,31 +86,77 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: new Text(widget.title),
-      ),
-      body: AnimatedCrossFade(
-        alignment: Alignment.center,
-        duration: const Duration(milliseconds: 200),
-        firstChild: CardResultView(),
-        secondChild: SettingsView(),
-        crossFadeState: _currentIndex == 0 ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-      ),
-      bottomNavigationBar: new BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
-        currentIndex: _currentIndex,
-        onTap: onTabTapped,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            backgroundColor: Colors.deepOrange,
-            icon: Icon(Icons.flag),
-            title: Text("Results")
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.lightBlue,
+        actions: <Widget>[
+          IconButton(
             icon: Icon(Icons.settings),
-            title: Text("Settings")
+            onPressed: (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => SettingsView())
+              );
+
+            },
+          )
+        ],
+      ),
+      floatingActionButton: new Column(
+        mainAxisSize: MainAxisSize.min,
+        children: new List.generate(icons.length, (int index) {
+          Widget child = new Container(
+            height: 70.0,
+            width: 56.0,
+            alignment: FractionalOffset.topCenter,
+            child: new ScaleTransition(
+              scale: new CurvedAnimation(
+                parent: _controller,
+                curve: new Interval(
+                  0.0,
+                  1.0 - index / icons.length / 2.0,
+                  curve: Curves.easeOut
+                ),
+              ),
+              child: new FloatingActionButton(
+                heroTag: null,
+                backgroundColor: backgroundColor,
+                mini: true,
+                child: new Icon(icons[index], color: foregroundColor),
+                onPressed: _controller.reverse,
+              ),
+            ),
+          );
+          return child;
+        }).toList()..add(
+          new FloatingActionButton(
+            heroTag: null,
+            child: new AnimatedBuilder(
+              animation: _controller,
+              builder: (BuildContext context, Widget child) {
+                return new Transform(
+                  transform: new Matrix4.rotationZ(_controller.value * 0.5 * 3.14159),
+                  alignment: FractionalOffset.center,
+                  //child: new Icon(_controller.isDismissed ? Icons.sort : Icons.close),
+                  child: AnimatedCrossFade(
+                    alignment: Alignment.center,
+                    duration: const Duration(milliseconds: 300),
+                    firstChild: Icon(Icons.sort),
+                    secondChild: Icon(Icons.close),
+                    crossFadeState: _controller.isDismissed ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                  )
+                );
+              },
+            ),
+            onPressed: () {
+              if (_controller.isDismissed) {
+                _controller.forward();
+              } else {
+                _controller.reverse();
+              }
+            },
           ),
-        ]
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body:CardResultView(),
     );
   }
 }
