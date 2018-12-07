@@ -49,11 +49,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
 
-  static const List<IconData> icons = const [ Icons.sort_by_alpha, Icons.format_list_numbered, Icons.timer ];
+  static const List<IconData> icons = const [ Icons.sort_by_alpha, Icons.access_time, Icons.timer ];
   AnimationController _controller;
-  List _cards = [];
-  int _counter = 0;
-  int _currentIndex = 0;  
+  List<List> _cards = [];
 
   @override
   void initState() {
@@ -67,6 +65,19 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     if(gSortType == 3){ //reverse list if sorting by finish time
       setState(() {
         cards.sort((a,b) => b[gSortType].compareTo(a[gSortType]));
+      });
+    }
+    else if(gSortType == 2){
+      List dnfs = [];
+      for (var i = 0; i < cards.length; i++) {
+        if (cards[i][2] == 0) {
+          dnfs.add(cards[i]);
+          cards.removeAt(i);
+        }
+      }
+      cards.sort((a,b) => a[gSortType].compareTo(b[gSortType]));
+      setState(() {
+        cards.addAll(dnfs);
       });
     }
     else{
@@ -106,11 +117,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
       for(var i = jsonDB.length-1; i >= 0; i--){
         var entry = jsonDB[i];
-        _newCards.add(RacerCard(entry.racerID, entry.racerName, entry.runDuration, entry.startTime));
+        _newCards.add(RacerCard(racerID: entry.racerID, racerName: entry.racerName, runDuration: entry.runDuration, startTime: entry.startTime));
       }
 
       setState(() {
-        _cards = _newCards;
+        //_cards = _newCards;
       });
     }
 
@@ -122,8 +133,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     List _tempCard = [
       [rng.nextInt(100), "Paul", 54.0, "17:42"],
       [rng.nextInt(100), "Liam", 51.2, "17:43"],
-      [rng.nextInt(100), "Aaron", 48, "17:43"],
+      [rng.nextInt(100), "Aaron", 0, "17:43"],
       [rng.nextInt(100), "Jacob", 55, "17:44"],
+      [rng.nextInt(100), "Parker", 51.2, "17:46"],
+      [rng.nextInt(100), "Bella", 57, "17:50"],
+      [rng.nextInt(100), "Gardy", 0, "18:00"],
+      [rng.nextInt(100), "Aaron", 49, "18:01"],
+      [rng.nextInt(100), "Jacob", 53.3, "18:01"],
+      [rng.nextInt(100), "Parker", 57.3, "18:06"],
+      [rng.nextInt(100), "Bella", 51, "18:10"],
     ];
 
     setState(() {
@@ -138,16 +156,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     Color backgroundColor = Theme.of(context).cardColor;
     Color foregroundColor = Theme.of(context).accentColor;
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+
     return new Scaffold(
       appBar: new AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+
         title: new Text(widget.title),
         actions: <Widget>[
           IconButton(
@@ -230,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             itemCount: _cards.length,
             itemBuilder: (context, index) {
               final item = _cards[index];
-              return RacerCard(item[0], item[1], item[2], item[3]);
+              return RacerCard(racerID: item[0], racerName: item[1], runDuration: item[2], startTime: item[3]);
             },
           )
         ),

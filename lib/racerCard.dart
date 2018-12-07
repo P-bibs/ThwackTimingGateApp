@@ -6,7 +6,7 @@ class RacerCard extends StatelessWidget {
   final runDuration;
   final startTime;
 
-  RacerCard(this.racerID, this.racerName, this.runDuration, this.startTime);
+  RacerCard({this.racerID, this.racerName, @required this.runDuration, @required this.startTime});
 
   @override
   Widget build(BuildContext context){
@@ -21,14 +21,15 @@ class RacerCard extends StatelessWidget {
                 color: runDuration == 0 ? Colors.red : Colors.green
                 ),
             title: Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Text(runDuration == 0 ? "DNF" : (runDuration.toString() + " seconds")),
             ),
             subtitle:
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Racer ' + racerID.toString() + ' (' + (racerName ?? 'No Name') + ')'),
+                  Text(racerName ?? 'No Name', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Racer ' + racerID.toString()),
                   Text('Started at ' + startTime)
                 ]
               )
@@ -37,11 +38,7 @@ class RacerCard extends StatelessWidget {
             child: new ButtonBar(
               children: <Widget>[
                 new FlatButton(
-                  child: const Text('VIEW RACER'),
-                  onPressed: () { /* ... */ },
-                ),
-                new FlatButton(
-                  child: const Text('N/A'),
+                  child: const Text('VIEW RACER\'S TIMES'),
                   onPressed: () { /* ... */ },
                 ),
               ],
