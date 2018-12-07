@@ -2,9 +2,13 @@ import 'dart:async';
 import 'requester.dart';
 import 'racerCard.dart';
 import 'settingsView.dart';
+import 'globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'dart:math';
+
+var rng = Random();
 
 void main() => runApp(new MyApp());
 
@@ -44,9 +48,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
-  AnimationController _controller;
 
   static const List<IconData> icons = const [ Icons.sort_by_alpha, Icons.format_list_numbered, Icons.timer ];
+  AnimationController _controller;
+  List _cards = [];
+  int _counter = 0;
+  int _currentIndex = 0;  
 
   @override
   void initState() {
@@ -56,12 +63,20 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     );
   }
 
-  int _counter = 0;
-  int _currentIndex = 0;
+  void _sortCards(List cards){
+    if(gSortType == 3){ //reverse list if sorting by finish time
+      setState(() {
+        cards.sort((a,b) => b[gSortType].compareTo(a[gSortType]));
+      });
+    }
+    else{
+      setState(() {
+        cards.sort((a,b) => a[gSortType].compareTo(b[gSortType]));
+      });
+    }
+  }
 
-
-  List<Widget> _card = [Text("No Results Yet")];
-  Future<Null> updateCards() async {
+  Future<Null> _updateCards() async {
     final jsonDB = await fetchTimes().
       timeout(
         Duration(seconds: 3),
@@ -83,24 +98,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       // for (var i = 1; i < _card.length; i++) {
       //   _errorMessage.add(_card[i]);
       // }
-      List<Widget> _tempCard = [];
-      _tempCard.add(RacerCard(1, "Paul", 54.0, "17:42"));
-      _tempCard.add(RacerCard(2, "Liam", 51.2, "17:43"));
-      _tempCard.add(RacerCard(3, "Aaron", 48, "17:43"));
-      _tempCard.add(RacerCard(4, "Jacob", 55, "17:44"));      
 
-      setState(() {
-        _card = _tempCard;
-      });
     }
     //if request is positive, update cards
     else{
       List<Widget> _newCards = [];
-
-      _newCards.add(Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("Results: ", ),
-      ));
 
       for(var i = jsonDB.length-1; i >= 0; i--){
         var entry = jsonDB[i];
@@ -108,21 +110,25 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       }
 
       setState(() {
-        _card = _newCards;
+        _cards = _newCards;
       });
     }
 
-    var _tempCard = [];
-      _tempCard.add(RacerCard(1, "Paul", 54.0, "17:42"));
-      _tempCard.add(RacerCard(2, "Liam", 51.2, "17:43"));
-      _tempCard.add(RacerCard(3, "Aaron", 48, "17:43"));
-      _tempCard.add(RacerCard(4, "Jacob", 55, "17:44"));
+    return null;
+  }
 
-      
+  Future<Null> _tempUpdateCards() async {
 
-      setState(() {
-        _card = _tempCard;
-      });
+    List _tempCard = [
+      [rng.nextInt(100), "Paul", 54.0, "17:42"],
+      [rng.nextInt(100), "Liam", 51.2, "17:43"],
+      [rng.nextInt(100), "Aaron", 48, "17:43"],
+      [rng.nextInt(100), "Jacob", 55, "17:44"],
+    ];
+
+    setState(() {
+      _cards = _tempCard;
+    });
 
     return null;
   }
@@ -156,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           )
         ],
       ),
-      floatingActionButton: new Column(
+      floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
         children: new List.generate(icons.length, (int index) {
           Widget child = new Container(
@@ -177,7 +183,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 backgroundColor: backgroundColor,
                 mini: true,
                 child: new Icon(icons[index], color: foregroundColor),
-                onPressed: _controller.reverse,
+                onPressed: (){
+                  gSortType = ((index == 0 ? 1 : index == 1 ? 3 : index == 2 ? 2 : -1));
+                  _sortCards(_cards);
+                  _controller.reverse();
+                },
               ),
             ),
           );
@@ -191,7 +201,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 return new Transform(
                   transform: new Matrix4.rotationZ(_controller.value * 0.5 * 3.14159),
                   alignment: FractionalOffset.center,
-                  //child: new Icon(_controller.isDismissed ? Icons.sort : Icons.close),
                   child: AnimatedCrossFade(
                     alignment: Alignment.center,
                     duration: const Duration(milliseconds: 300),
@@ -215,10 +224,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
       body: Container(
         child: RefreshIndicator(
-          onRefresh: updateCards,
-          child: ListView(
+          onRefresh: _tempUpdateCards,
+          child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
-            children: _card
+            itemCount: _cards.length,
+            itemBuilder: (context, index) {
+              final item = _cards[index];
+              return RacerCard(item[0], item[1], item[2], item[3]);
+            },
           )
         ),
       )
