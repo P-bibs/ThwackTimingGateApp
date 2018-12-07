@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   static const List<IconData> icons = const [ Icons.sort_by_alpha, Icons.access_time, Icons.timer ];
   AnimationController _controller;
-  List<List> _cards = [];
+  List _cards = [];
 
   @override
   void initState() {
