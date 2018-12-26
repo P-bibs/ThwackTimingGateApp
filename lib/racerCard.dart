@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'SingleRacerView.dart';
 
 class RacerCard extends StatelessWidget {
   final racerID;
   final racerName;
   final runDuration;
   final startTime;
+  final showButtons;
 
-  RacerCard({this.racerID, this.racerName, @required this.runDuration, @required this.startTime});
+  RacerCard({this.racerID, this.racerName, @required this.runDuration, @required this.startTime, this.showButtons = true});
 
   @override
   Widget build(BuildContext context){
@@ -34,12 +36,20 @@ class RacerCard extends StatelessWidget {
                 ]
               )
           ),
-          new ButtonTheme.bar( // make buttons use the appropriate styles for cards
-            child: new ButtonBar(
+          ButtonTheme.bar( // make buttons use the appropriate styles for cards
+            child: ButtonBar(
               children: <Widget>[
-                new FlatButton(
-                  child: const Text('VIEW RACER\'S TIMES'),
-                  onPressed: () { /* ... */ },
+                Offstage(
+                  offstage: !showButtons,
+                  child: FlatButton(
+                    child: const Text('VIEW RACER\'S TIMES'),
+                    onPressed: () {
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: (context) => SingleRacerView(racerID: racerID, racerName: racerName,))
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

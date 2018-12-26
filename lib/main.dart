@@ -51,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   static const List<IconData> icons = const [ Icons.sort_by_alpha, Icons.access_time, Icons.timer ];
   AnimationController _controller;
-  List _cards = [];
 
   @override
   void initState() {
@@ -121,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       }
 
       setState(() {
-        //_cards = _newCards;
+        //gCards = _newCards;
       });
     }
 
@@ -131,21 +130,21 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   Future<Null> _tempUpdateCards() async {
 
     List _tempCard = [
-      [rng.nextInt(100), "Paul", 54.0, "17:42"],
-      [rng.nextInt(100), "Liam", 51.2, "17:43"],
-      [rng.nextInt(100), "Aaron", 0, "17:43"],
-      [rng.nextInt(100), "Jacob", 55, "17:44"],
-      [rng.nextInt(100), "Parker", 51.2, "17:46"],
-      [rng.nextInt(100), "Bella", 57, "17:50"],
-      [rng.nextInt(100), "Gardy", 0, "18:00"],
-      [rng.nextInt(100), "Aaron", 49, "18:01"],
-      [rng.nextInt(100), "Jacob", 53.3, "18:01"],
-      [rng.nextInt(100), "Parker", 57.3, "18:06"],
-      [rng.nextInt(100), "Bella", 51, "18:10"],
+      [1, "Paul", 54.0, "17:42"],
+      [2, "Liam", 51.2, "17:43"],
+      [3, "Aaron", 0, "17:43"],
+      [4, "Jacob", 55, "17:44"],
+      [5, "Parker", 51.2, "17:46"],
+      [6, "Bella", 57, "17:50"],
+      [7, "Gardy", 0, "18:00"],
+      [3, "Aaron", 49, "18:01"],
+      [4, "Jacob", 53.3, "18:01"],
+      [5, "Parker", 57.3, "18:06"],
+      [6, "Bella", 51, "18:10"],
     ];
 
     setState(() {
-      _cards = _tempCard;
+      gCards = _tempCard;
     });
 
     return null;
@@ -197,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 child: new Icon(icons[index], color: foregroundColor),
                 onPressed: (){
                   gSortType = ((index == 0 ? 1 : index == 1 ? 3 : index == 2 ? 2 : -1));
-                  _sortCards(_cards);
+                  _sortCards(gCards);
                   _controller.reverse();
                 },
               ),
@@ -239,9 +238,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           onRefresh: _tempUpdateCards,
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: _cards.length,
+            itemCount: gCards.length,
             itemBuilder: (context, index) {
-              final item = _cards[index];
+              final item = gCards[index];
               return RacerCard(racerID: item[0], racerName: item[1], runDuration: item[2], startTime: item[3]);
             },
           )
