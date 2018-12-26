@@ -30,64 +30,19 @@ Future<List<Time>> fetchTimes() async {
 
 class Time {
   final int racerID;
-  final String racerName;
+  //final String racerName;
   final double runDuration;
   final String startTime;
 
-  Time({this.racerID, this.racerName, this.runDuration, this.startTime});
+  //add back this.racerName
+  Time({this.racerID, this.runDuration, this.startTime});
 
   factory Time.fromJson(Map<String, dynamic> json) {
     return Time(
       racerID: json['racerID'] as int,
-      racerName: json['racerName'] as String,
+      //racerName: json['racerName'] as String,
       runDuration: json['runDuration'] as double,
       startTime: json['startTime'] as String,
     );
-  }
-}
-
-Future<List<Map<String, dynamic>>> fetchTable() async {
-  final response =
-      await http.get('http://' + globals.currentIP + ':5000/idTable');
-
-  if (response.statusCode == 200) {
-    // If server returns an OK response, parse the JSON
-    List data = json.decode(response.body);
-    return data;
-
-    // List<TableItem> returnList = [];
-    // for(var i = 0; i < data.length; i++){ 
-    //   returnList.add(TableItem.fromJson(data[i]));
-    // }
-    // return returnList;
-
-  } else {
-    // If that response was not OK, throw an error.
-    throw Exception('Failed to load post');
-  }
-}
-
-Future<void> sendTable(dynamic data) async {
-  var response;
-
-  http.post(
-    'http://' + globals.currentIP + ':5000/idTable', 
-    body: data
-  ).then((postResponse) {response = postResponse;});
-
-  // HttpRequest.request(
-  //   'http://' + globals.currentIP + ':5000/idTable',
-  //   method: 'POST',
-  //   sendData: json.encode(data),
-  //   requestHeaders: {
-  //     'Content-Type': 'application/json; charset=UTF-8'
-  //   }
-  // )
-
-  if (response.statusCode == 200) {
-
-  } else {
-    // If that response was not OK, throw an error.
-    throw Exception('Failed to send post');
   }
 }

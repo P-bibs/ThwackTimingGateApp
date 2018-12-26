@@ -14,13 +14,7 @@ class TableConfigureView extends StatefulWidget {
 
 class _TableConfigureViewState extends State<TableConfigureView> {
 
-  @override
-  initState(){
-    super.initState();
-    fetchTable();
-  }
-
-  List _table = [];
+  List _table = globals.idToNameTable;
 
   Future<void> _addEntry() async {
     var _idController = TextEditingController();
@@ -77,29 +71,6 @@ class _TableConfigureViewState extends State<TableConfigureView> {
     );
   }
 
-  Future<Null> fetchTable() async {
-    // final jsonTable = await fetchTable().
-    //   timeout(
-    //     Duration(seconds: 3),
-    //     onTimeout: (){return [];}
-    //   );
-
-      final jsonTable = [
-        ["1", "Paul"],
-        ["2", "Liam"],
-        ["3", "Aaron"],
-        ["4", "Parker"],
-        ["5", "Jacob"]
-      ];
-
-      setState(() {
-        _table = jsonTable;
-      });
-    // }
-
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +79,7 @@ class _TableConfigureViewState extends State<TableConfigureView> {
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.check),
-          onPressed: (){sendTable(_table);Navigator.pop(context);},
+          onPressed: (){globals.idToNameTable = _table;Navigator.pop(context);},
         ),
         
         actions: <Widget>[

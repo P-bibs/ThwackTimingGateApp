@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'SingleRacerView.dart';
+import 'globals.dart';
 
 class RacerCard extends StatelessWidget {
   final racerID;
@@ -46,7 +47,7 @@ class RacerCard extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context, 
-                        MaterialPageRoute(builder: (context) => SingleRacerView(racerID: racerID, racerName: racerName,))
+                        MaterialPageRoute(builder: (context) => SingleRacerView(racerID: racerID, racerName: resolveIdToName(racerID)))
                       );
                     },
                   ),

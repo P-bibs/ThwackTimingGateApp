@@ -74,7 +74,7 @@ class _SingleRacerViewState extends State<SingleRacerView> with SingleTickerProv
           itemCount: _racerCards.length,
           itemBuilder: (context, index) {
             List thisCard = _racerCards[index];
-            return RacerCard(racerID: thisCard[0], racerName: thisCard[1], runDuration: thisCard[2], startTime: thisCard[3], showButtons: false,);
+            return RacerCard(racerID: thisCard[0], racerName: resolveIdToName(thisCard[0]), runDuration: thisCard[1], startTime: thisCard[2], showButtons: false,);
           },
 
         )

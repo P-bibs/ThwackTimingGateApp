@@ -109,18 +109,24 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       //   _errorMessage.add(_card[i]);
       // }
 
+      //error card
+      // List errorCard = [RacerCard(racerID: -1, racerName: "Error", runDuration: -1.0, startTime: "Error")];
+      // setState((){
+      //   gCards = errorCard;
+      // });
+
     }
     //if request is positive, update cards
     else{
-      List<Widget> _newCards = [];
+      List _newCards = [];
 
       for(var i = jsonDB.length-1; i >= 0; i--){
         var entry = jsonDB[i];
-        _newCards.add(RacerCard(racerID: entry.racerID, racerName: entry.racerName, runDuration: entry.runDuration, startTime: entry.startTime));
+        _newCards.add([entry.racerID, entry.runDuration, entry.startTime]);
       }
 
       setState(() {
-        //gCards = _newCards;
+        gCards = _newCards;
       });
     }
 
@@ -130,17 +136,17 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   Future<Null> _tempUpdateCards() async {
 
     List _tempCard = [
-      [1, "Paul", 54.0, "17:42"],
-      [2, "Liam", 51.2, "17:43"],
-      [3, "Aaron", 0, "17:43"],
-      [4, "Jacob", 55, "17:44"],
-      [5, "Parker", 51.2, "17:46"],
-      [6, "Bella", 57, "17:50"],
-      [7, "Gardy", 0, "18:00"],
-      [3, "Aaron", 49, "18:01"],
-      [4, "Jacob", 53.3, "18:01"],
-      [5, "Parker", 57.3, "18:06"],
-      [6, "Bella", 51, "18:10"],
+      [1, 54.0, "17:42"],
+      [2, 51.2, "17:43"],
+      [3, 0, "17:43"],
+      [4, 55, "17:44"],
+      [5, 51.2, "17:46"],
+      [6, 57, "17:50"],
+      [7, 0, "18:00"],
+      [3, 49, "18:01"],
+      [4, 53.3, "18:01"],
+      [5, 57.3, "18:06"],
+      [6, 51, "18:10"],
     ];
 
     setState(() {
@@ -235,13 +241,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
       body: Container(
         child: RefreshIndicator(
-          onRefresh: _tempUpdateCards,
+          onRefresh: (useTestData ? _tempUpdateCards : _updateCards),
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: gCards.length,
             itemBuilder: (context, index) {
               final item = gCards[index];
-              return RacerCard(racerID: item[0], racerName: item[1], runDuration: item[2], startTime: item[3]);
+              return RacerCard(racerID: item[0], racerName: resolveIdToName(item[0]), runDuration: item[1], startTime: item[2]);
             },
           )
         ),

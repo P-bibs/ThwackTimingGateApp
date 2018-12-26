@@ -3,6 +3,7 @@ import 'requester.dart';
 import 'racerCard.dart';
 import 'tableConfigureView.dart';
 import 'dart:math';
+import 'globals.dart' as globals;
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -135,6 +136,11 @@ class _SettingsViewState extends State<SettingsView> {
               "Configuration",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
+          ),
+          SwitchListTile(
+            title: const Text('Use Test Data'),
+            value: globals.useTestData,
+            onChanged: (bool value) { setState(() { globals.useTestData = value; }); },
           ),
           ListTile(
             title: const Text("Finish Line IP"),
