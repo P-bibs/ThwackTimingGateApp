@@ -3,8 +3,6 @@ The cross-platform app for the [Thwack Timing Gate](https://thwacktiminggate.com
 
 This app interfaces with the finish line for the Thwack Timing System. Learn about [the entire project](https://thwacktiminggate.com/) or check out [the finish line](https://github.com/P-bibs/ThwackTimingGateFinishLine) and the [web server](https://github.com/P-bibs/ThwackTimingGateServer) it uses to host results.
 
----
-
 ## Features
 The Thwack Timing Gate mobile app allows the retrieval and sorting of training results, as well as configuration of the timing gate itself. Below are a few key features, which can be seen in action in [this video](https://youtu.be/TYNzY31ogd4).
 
@@ -31,8 +29,6 @@ The start line features a keypad for racers to punch in their IDs. Use this inte
 
 <img align="center" src="https://d1qmdf3vop2l07.cloudfront.net/unique-yak.cloudvent.net/compressed/6238049e8dcd0d1469a40af11246efb1.png" alt="drawing" width="400"/>
 
----
-
 ## Development
 Start by cloning the repository
 ```bash
@@ -53,8 +49,6 @@ Once you've got all of these, run
 ```bash
 flutter run
 ```
-
----
 
 ## Documentation
 
