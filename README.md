@@ -3,6 +3,27 @@ The cross-platform app for the [Thwack Timing Gate](https://thwacktiminggate.com
 
 This app interfaces with the finish line for the Thwack Timing System. Learn about [the entire project](https://thwacktiminggate.com/) or check out [the finish line](https://github.com/P-bibs/ThwackTimingGateFinishLine) and the [web server](https://github.com/P-bibs/ThwackTimingGateServer) it uses to host results.
 
+## Install
+Start by cloning the repository
+```bash
+git clone https://github.com/P-bibs/ThwackTimingGateApp
+cd ThwackTimingGateApp
+```
+Then, run the development build of the app. To complete the following step, you'll need:
+1. A [Flutter install](https://flutter.dev/docs/get-started/install) in your development environment
+2. An [Android Studio](https://developer.android.com/studio) install
+3. The Fluter and Dart plug-ins for Android Studio
+2. A valid device to run the app on. This could be any one of:
+  * An [Android Virtual Device](https://developer.android.com/studio/run/managing-avds) 
+  * An [IOS Simulator](https://developer.apple.com/library/archive/documentation/IDEs/Conceptual/iOS_Simulator_Guide/GettingStartedwithiOSSimulator/GettingStartedwithiOSSimulator.html)
+  * An Android device plugged in with USB debugging allowed
+  * An IOS device plugged in with the development machine trusted
+
+Once you've got all of these, run
+```bash
+flutter run
+```
+
 ## Features
 The Thwack Timing Gate mobile app allows the retrieval and sorting of training results, as well as configuration of the timing gate itself. Below are a few key features, which can be seen in action in [this video](https://youtu.be/TYNzY31ogd4).
 
@@ -28,27 +49,6 @@ An easily accessible settings tab allows configuration of the Thwack Timing Gate
 The start line features a keypad for racers to punch in their IDs. Use this interface to edit the table that converts these IDs to actual racer names.
 
 <img align="center" src="https://d1qmdf3vop2l07.cloudfront.net/unique-yak.cloudvent.net/compressed/6238049e8dcd0d1469a40af11246efb1.png" alt="drawing" width="400"/>
-
-## Development
-Start by cloning the repository
-```bash
-git clone https://github.com/P-bibs/ThwackTimingGateApp
-cd ThwackTimingGateApp
-```
-Then, run the development build of the app. To complete the following step, you'll need:
-1. A [Flutter install](https://flutter.dev/docs/get-started/install) in your development environment
-2. An [Android Studio](https://developer.android.com/studio) install
-3. The Fluter and Dart plug-ins for Android Studio
-2. A valid device to run the app on. This could be any one of:
-  * An [Android Virtual Device](https://developer.android.com/studio/run/managing-avds) 
-  * An [IOS Simulator](https://developer.apple.com/library/archive/documentation/IDEs/Conceptual/iOS_Simulator_Guide/GettingStartedwithiOSSimulator/GettingStartedwithiOSSimulator.html)
-  * An Android device plugged in with USB debugging allowed
-  * An IOS device plugged in with the development machine trusted
-
-Once you've got all of these, run
-```bash
-flutter run
-```
 
 ## Documentation
 
